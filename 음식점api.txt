@@ -1,0 +1,1461 @@
+
+
+공공데이터 오픈 API 확대 및 포털 고도화
+Open API 활용가이드
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+개정 이력
+버전	변경일	변경 사유	변경 내용	작성자	승인
+1.0	2020-08-13	최초작성	최초작성	이재경	
+					
+					
+					
+					
+
+ 
+
+1. 서비스 명세	3
+1.1 부산맛집정보 서비스	4
+가. API 서비스 개요	4
+나. 상세기능 목록	5
+다. 상세기능내역	5
+1) [부산맛집 국문 정보] 상세기능명세	5
+2) [부산맛집 영문 정보] 상세기능명세	16
+3) [부산맛집 일문 정보] 상세기능명세	27
+4) [부산맛집 중문 간체 정보] 상세기능명세	38
+5) [부산맛집 중문 번체 정보] 상세기능명세	48
+2. OpenAPI 에러 코드정리	60
+
+ 
+1. 서비스 명세
+1.1 부산맛집정보 서비스
+가. API 서비스 개요
+API 서비스 정보	API명(영문)	FoodService
+	API명(국문)	부산맛집정보 서비스
+	API 설명	부산관광맛집의 이름, 주소, 홈페이지, 전화번호, 좌표, 상세정보를 조회하는 서비스
+API 서비스
+보안적용
+기술 수준	서비스 인증/권한	[O] ServiceKey    [ ] 인증서 (GPKI/NPKI)
+[ ] Basic (ID/PW)  [ ] 없음
+	메시지 레벨
+암호화	[ ] 전자서명   [ ] 암호화   [O] 없음
+	전송 레벨 암호화	[ ] SSL   [O] 없음
+	인터페이스 표준	[ ] SOAP 1.2
+(RPC-Encoded, Document Literal, Document Literal Wrapped)
+[O] REST (GET)
+[ ] RSS 1.0   [ ] RSS 2.0   [ ] Atom 1.0   [ ] 기타
+	교환 데이터 표준
+(중복선택가능)	[O] XML   [O] JSON   [ ] MIME   [ ] MTOM
+API 서비스
+배포정보	서비스 URL	http://apis.data.go.kr/6260000/FoodService
+	서비스 명세 URL
+(WSDL 또는 WADL)	http://apis.data.go.kr/6260000/FoodService?_wadl&type=xml
+	서비스 버전	1.0
+	서비스 시작일	2020-08-13	서비스 배포일	2020-08-13
+	서비스 이력	2020-08-13: 서비스 시작
+	메시지 교환유형	[O] Request-Response   [ ] Publish-Subscribe
+[ ] Fire-and-Forgot   [ ] Notification
+	서비스 제공자	이재경 / 부산시 관광진흥과 / 051-888-5204 / bsjklee@korea.kr
+	데이터 갱신주기	년 1회
+
+
+
+나. 상세기능 목록
+번호	API명(국문)	상세기능명(영문)	상세기능명(국문)
+1	부산맛집정보 서비스	getFoodKr	부산맛집 국문 정보
+2	부산맛집정보 서비스	getFoodEn	부산맛집 영문 정보
+3	부산맛집정보 서비스	getFoodJa	부산맛집 일문 정보
+4	부산맛집정보 서비스	getFoodZhs	부산맛집 중문 간체 정보
+5	부산맛집정보 서비스	getFoodZht	부산맛집 중문 번체 정보
+
+다. 상세기능내역
+1) [부산맛집 국문 정보] 상세기능명세
+a) 상세기능정보
+상세기능 번호	1	상세기능 유형	조회
+상세기능명(국문)	부산맛집 국문 정보
+상세기능 설명	부산맛집 이름, 제목, 좌표, 상세정보, 이미지 등 국문 정보 조회하는 기능
+Call Back URL	http://apis.data.go.kr/6260000/FoodService/getFoodKr
+최대 메시지 사이즈	[4000] byte
+평균 응답 시간	[500] ms	초당 최대 트랙잭션	[30] tps
+b) 요청 메시지 명세
+항목명(영문)	항목명(국문)	항목크기	항목구분	샘플데이터	항목설명
+serviceKey	인증키	100	1	인증키
+(URL Encode)	공공데이터포털에서 발급받은 인증키
+numOfRows	한 페이지 결과 수	4	1	10	한 페이지 결과 수
+pageNo	페이지 번호	4	1	1	페이지 번호
+resultType	JSON방식 호출	4	0		JSON방식으로 호출 시 파라미터 resultType=json 입력
+UC_SEQ	콘텐츠 ID	11	0		콘텐츠 ID
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+c) 응답 메시지 명세
+항목명(영문)	항목명(국문)	항목크기	항목구분	샘플데이터	항목설명
+numOfRows	한 페이지 결과 수	4	1	10	한 페이지당 표출 데이터 수
+resultCode	결과코드	2	1	00	결과코드
+resultMsg	결과메시지	100	1	OK	결과메시지
+pageNo	페이지 수	4	1	1	페이지 수
+totalCount	데이터 총 개수	4	1	200	데이터 총 개수
+UC_SEQ	콘텐츠ID	11	0	69	콘텐츠ID
+MAIN_TITLE	콘텐츠명	300	0	로스포르쪼	콘텐츠명
+GUGUN_NM	구군	100	0	영도구	구군
+LAT	위도	20	0	35.08712	위도
+LNG	경도	20	0	128.90971	경도
+PLACE	장소	300	0	로스포르쪼	장소
+TITLE	제목	300	0	계란만 사용해 반죽해 만든 생면	제목
+SUBTITLE	부제목	300	0	로스포르쪼	부제목
+ADDR1	주소	200	0	강서구 명지오션시티7로 29	주소
+ADDR2	주소 기타 	200	0		주소 기타 
+CNTCT_TEL	연락처	200	0	051-205-7406	연락처
+HOMEPAGE_URL	홈페이지	200	0	http://huinnyeoul.co.kr	홈페이지
+USAGE_DAY_WEEK_AND_TIME	운영 및 시간	500	0	11:00a.m. ~ 22:00p.m.	운영 및 시간
+RPRSNTV_MENU	대표메뉴	200	0		대표메뉴
+MAIN_IMG_NORMAL	이미지URL	500	0	>/uploadImgs/files/cntnts/20191209161314293_ttiel	이미지URL
+MAIN_IMG_THUMB	썸네일이미지URL	500	0	>/uploadImgs/files/cntnts/20191209161314293_thumbL	썸네일이미지URL
+ITEMCNTNTS	상세내용	1000	0	창밖의 풍경이 아름다운 곳, 이탈리아 요리 전문점 로스포르쪼. 이 곳은 과거에 갤러리로 쓰다가 음식점으로 개조한 집이라 인테리어 소품 하나하나가 작품인 곳이다.이탈리아 밀가루를 사용하여 만든 수제 생면 파스타, 로제 파스타가 인상적이다.
+
+특히 생면은 물을 하나도 쓰지 않고 계란으로만 반죽해서 만들었다고 한다. 파스타를 먹을 때마다 건강을 챙긴다는 느낌을 받는다.	상세내용
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+d) 요청/응답 메시지 예제
+요청메시지
+http://apis.data.go.kr/6260000/FoodService/getFoodKr?serviceKey=인증키&numOfRows=10&pageNo=1
+응답메시지
+<response>
+  <header>
+    <resultCode>00</resultCode>
+    <resultMsg>NORMAL_CODE</resultMsg>
+  </header>
+  <body>
+    <items>
+      <item>
+        <MAIN_TITLE>로스포르쪼</MAIN_TITLE>
+        <LNG>128.90971</LNG>
+        <UC_SEQ>69</UC_SEQ>
+        <CNTCT_TEL>051-205-7406</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191209161314293_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>창밖의 풍경이 아름다운 곳, 이탈리아 요리 전문점 로스포르쪼. 이 곳은 과거에 갤러리로 쓰다가 음식점으로 개조한 집이라 인테리어 소품 하나하나가 작품인 곳이다.이탈리아 밀가루를 사용하여 만든 수제 생면 파스타, 로제 파스타가 인상적이다.
+
+특히 생면은 물을 하나도 쓰지 않고 계란으로만 반죽해서 만들었다고 한다. 파스타를 먹을 때마다 건강을 챙긴다는 느낌을 받는다.
+</ITEMCNTNTS>
+        <PLACE>로스포르쪼</PLACE>
+        <SUBTITLE>로스포르쪼</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>강서구</GUGUN_NM>
+        <ADDR1>강서구 명지오션시티7로 29</ADDR1>
+        <RPRSNTV_MENU />
+        <HOMEPAGE_URL />
+        <TITLE>계란만 사용해 반죽해 만든 생면</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191209161314293_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.08712</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>만드리곤드레밥</MAIN_TITLE>
+        <LNG>128.9524</LNG>
+        <UC_SEQ>70</UC_SEQ>
+        <CNTCT_TEL>051-941-3669</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191209162810545_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>돌솥에 금방 해 나오는 곤드레밥을 메인으로 열가지가 넘는 반찬을 함께 즐길 수 있는 만드리곤드레밥 정식은 이 곳의 대표 메뉴이다.
+
+준비된 양념장을 곁들여 먹는 것이 기본적이지만 함께 제공되는 다른 나물 반찬들과 함께 비벼 먹으면 더 풍성한 곤드레 밥을 맛볼 수 있다. 또 식사를 마친 후에는 돌솥에 남아있던 누룽지를 후식으로 깔끔하게 입가심할 수 있다.
+</ITEMCNTNTS>
+        <PLACE>만드리곤드레밥</PLACE>
+        <SUBTITLE>만드리곤드레밥</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>강서구</GUGUN_NM>
+        <ADDR1>강서구 공항앞길 85번길 13</ADDR1>
+        <RPRSNTV_MENU>돌솥곤드레정식, 호박오리훈제</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>건강하고 든든하게 한끼 해결</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191209162810545_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.177387</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>만호갈미 샤브샤브</MAIN_TITLE>
+        <LNG>128.92917</LNG>
+        <UC_SEQ>72</UC_SEQ>
+        <CNTCT_TEL>051-271-4389</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191216135832825_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>통통한 갈미조갯살을 넣어 즐기는 샤브샤브가 인기인 갈미조개 전문 횟집이다. 이름도 생소한 갈미조개는 물에 넣어 익혀도 질겨지지 않는 것이 특징인데, 이 갈미조개를 이용해 개발한 갈미&amp;삼겹살 구이와 갈미 샤브샤브, 갈미수육, 전골이 이곳의 대표 메뉴이다
+
+특히 갈미샤브샤브는 조개가 우러나 시원해지는 샤브샤브 국물 맛으로 유명하다
+</ITEMCNTNTS>
+        <PLACE>만호갈미 샤브샤브</PLACE>
+        <SUBTITLE>만호갈미 샤브샤브</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>12:00p.m. ~ 21:30p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>강서구</GUGUN_NM>
+        <ADDR1>강서구 르노삼성대로 602</ADDR1>
+        <RPRSNTV_MENU>갈미샤브샤브, 갈미수육</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>통통한 갈미조갯살 넣어 즐기는 샤브샤브</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191216135832825_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.101143</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>명지할매재첩국</MAIN_TITLE>
+        <LNG>128.90948</LNG>
+        <UC_SEQ>73</UC_SEQ>
+        <CNTCT_TEL>051-271-1207</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217113159296_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>명지오션시티에 위치한 재첩요리 전문점. 재첩은 간 기능을 활성화해 피로를 풀어주고 원기를 회복시켜주는 효과가 있어 술국으로 널리 알려져 있다.
+이곳의 재첩 국은 속까지 시원해서 해장국으로도 제대로다. 또 재첩만을 건져내어 초고추장과 갖은 채소로 버무려 무친 재첩회는 새콤달콤 씹는 맛이 일품이다.
+</ITEMCNTNTS>
+        <PLACE>명지할매재첩국</PLACE>
+        <SUBTITLE>명지할매재첩국</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>07:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>강서구</GUGUN_NM>
+        <ADDR1>강서구 명지오션시티7로 41-6</ADDR1>
+        <RPRSNTV_MENU>재첩국, 재첩회밥</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>해장국으로도 제대로인 재첩국</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217113159296_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.08626</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>길스시													</MAIN_TITLE>
+        <LNG>129.05461</LNG>
+        <UC_SEQ>74</UC_SEQ>
+        <CNTCT_TEL>051-804-3690</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217095239551_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>부산 서면에 위치한 스시 전문점인 길스시. 모든 요리를 알칼리 이온수로 만들고 있다. 알칼리 이온수의 경우, 소화를 돕고 동시에 체내 노폐물을 배출하는 도움을 주는 물이라고 한다.													
+길스시세트초밥, 지라시스시, 코스요리, 초밥 도시락 그리고 다양한 사케를 맛볼 수 있는 곳이다. 눈도 즐겁고 맛도 좋은 길스시를 맛 보라.													
+
+</ITEMCNTNTS>
+        <PLACE>길스시</PLACE>
+        <SUBTITLE>길스시</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>12:00p.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>부산진구</GUGUN_NM>
+        <ADDR1>부산진구 부전로 71</ADDR1>
+        <RPRSNTV_MENU>초밥, 생선회코스</RPRSNTV_MENU>
+        <HOMEPAGE_URL>https://gilsushi.modoo.at/</HOMEPAGE_URL>
+        <TITLE>모든 요리는 알칼리 이온수로													</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217095239551_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.156452</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>몽도르</MAIN_TITLE>
+        <LNG>128.81042</LNG>
+        <UC_SEQ>75</UC_SEQ>
+        <CNTCT_TEL>010-3877-0526</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217112934725_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>가덕도 바다뷰를 자랑하는 이쁜 카페 몽도르. 오션 뷰와 함께 잊지 못할 일출, 일몰을 볼 수 있는 몽도르 카페에서는 보는 즐거움 외에도 최고의 커피를 제공하는 곳이다. 인텔리젠시아와 스텀프타운과 함께 LA스페셜티 커피1세대인 라밀커피 원두와 세계1위 에스프레소 머신 라마르조코를 사용하는 커피전문점이다.
+
+은은하게 남는 카라멜의 달달한 향과 원두의 묵직하면서 고소한 맛의 발란스가 아주 좋다.
+</ITEMCNTNTS>
+        <PLACE>몽도르</PLACE>
+        <SUBTITLE>몽도르</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>10:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>강서구</GUGUN_NM>
+        <ADDR1>강서구 가덕해안로 600(천성동)</ADDR1>
+        <RPRSNTV_MENU>레드벨벳케이크, 아메리카노</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>오션 뷰와 함께 잊지 못할 일출</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217112934725_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.04261</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>동보성</MAIN_TITLE>
+        <LNG>129.05563</LNG>
+        <UC_SEQ>76</UC_SEQ>
+        <CNTCT_TEL>051-816-1649</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217100843590_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>중국음식의 진수인 '북경요리', '사천요리'를 현지 분위기 그대로 맛볼 수 있는 곳! 서면 영광도서 맞은편 유원오피스텔 지하에 위치한 동보성은 전통 중국풍 분위기에 철저한 위생관리와 서비스로 다양한 중국 음식을 즐길 수 있는 차이나 레스토랑이다.													
+30년 경력의 주인이 아침마다 직접 시장에서 신선한 재료를 구입하여 요리하고 경영하는 동보성은 분명 여느 중식업소와는 맛과 분위기에서 차이가 난다.													
+</ITEMCNTNTS>
+        <PLACE>동보성</PLACE>
+        <SUBTITLE>동보성</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>부산진구</GUGUN_NM>
+        <ADDR1>부산진구 서면문화로27(부전동)</ADDR1>
+        <RPRSNTV_MENU>짬뽕, 탕수육</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>신선한 재료를 직접 구입하여 요리하고 경영까지													</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217100843590_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.15959</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>민물가든</MAIN_TITLE>
+        <LNG>128.89459</LNG>
+        <UC_SEQ>77</UC_SEQ>
+        <CNTCT_TEL>051-971-8428</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217101816206_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>30년 전통이 있는 원조 찜 전문점인 민물가든은 옛 방식 그대로 나무시루에 스팀을 이용하여 음식을 쪄내며 대대로 이어온 비법으로 20여가지 양념을 저온 숙성시켜 1시간 가량 쪄내는 찜요리가 일품이다.
+직접 키우는 신선한 야채로 만든 밑반찬이 제공된다.
+민물가든의 대표 음식은 잉어찜, 자라용봉탕, 묵은지 붕어조림이다.
+</ITEMCNTNTS>
+        <PLACE>민물가든</PLACE>
+        <SUBTITLE>민물가든</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>강서구</GUGUN_NM>
+        <ADDR1>강서구 둔치중앙길5(봉림동) </ADDR1>
+        <RPRSNTV_MENU>묵은지붕어조림, 붕어찜</RPRSNTV_MENU>
+        <HOMEPAGE_URL>https://blog.naver.com/rladba1</HOMEPAGE_URL>
+        <TITLE>옛 방식 그대로 찜을 하다</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217101816206_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.160496</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>마당집</MAIN_TITLE>
+        <LNG>129.05458</LNG>
+        <UC_SEQ>78</UC_SEQ>
+        <CNTCT_TEL>051-806-8602</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217101924575_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>질좋은 생고기, 돌솥밥, 즉석 순두부가 유명한 곳으로, 오랜 전통을 자랑하는 마당집의 고기는 산지에서 직송하고 있는 신토불이 한우로 육질이 부드럽고 고기 맛이 좋아 인기가 많다.
+찹쌀, 검은콩, 팥, 밤, 대추 등 갖은 재료로 맛깔스럽게 지어낸 돌솥밥에 곁들인 숯불에 끓여내는 된장찌개는 전통적인 한국의 맛으로 영양가가 높고 식욕을 돋우는 최고의 보양식이다.
+</ITEMCNTNTS>
+        <PLACE>마당집</PLACE>
+        <SUBTITLE>마당집</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:30a.m. ~ 22:30p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>부산진구</GUGUN_NM>
+        <ADDR1>부산진구 부전로 69(부전동)					</ADDR1>
+        <RPRSNTV_MENU>생갈비살, 돌솥한정식</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>육질이 부드럽고 고기 맛이 좋아</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217101924575_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.15627</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>민물집</MAIN_TITLE>
+        <LNG>128.88205</LNG>
+        <UC_SEQ>79</UC_SEQ>
+        <CNTCT_TEL>051-971-7798</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217112704984_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>렛츠런파크 부산경남 인근에 위치한 메기매운탕 전문점. 큰 솥으로 함께 나오는 데, 버너 위에 끓여서 먹는 맛이 제맛이다.
+메기매운탕은 특히 시원하면서 얼큰한 맛이 중독적이다. 밥 한 공기는 거뜬하게 먹을 수 있다.
+민물고기의 담백함을 제대로 느끼고 싶다면 민물집으로 가보자.
+</ITEMCNTNTS>
+        <PLACE>민물집</PLACE>
+        <SUBTITLE>민물집</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>10:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>강서구</GUGUN_NM>
+        <ADDR1>강서구 가락대로900번가길 10</ADDR1>
+        <RPRSNTV_MENU>장어구이, 붕어탕</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>밥 한공기는 그냥 뚝딱</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217112704984_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.151657</LAT>
+      </item>
+    </items>
+    <numOfRows>10</numOfRows>
+    <pageNo>1</pageNo>
+    <totalCount>200</totalCount>
+  </body>
+</response>
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+2) [부산맛집 영문 정보] 상세기능명세
+a) 상세기능정보
+상세기능 번호	2	상세기능 유형	조회
+상세기능명(국문)	부산맛집 영문 정보
+상세기능 설명	부산맛집 이름, 제목, 좌표, 상세정보, 이미지 등 영문 정보 조회하는 기능
+Call Back URL	http://apis.data.go.kr/6260000/FoodService/getFoodEn
+최대 메시지 사이즈	[4000] byte
+평균 응답 시간	[500] ms	초당 최대 트랙잭션	[30] tps
+b) 요청 메시지 명세
+항목명(영문)	항목명(국문)	항목크기	항목구분	샘플데이터	항목설명
+serviceKey	인증키	100	1	인증키
+(URL Encode)	공공데이터포털에서 발급받은 인증키
+numOfRows	한 페이지 결과 수	4	1	10	한 페이지 결과 수
+pageNo	페이지 번호	4	1	1	페이지 번호
+resultType	JSON방식 호출	4	0		JSON방식으로 호출 시 파라미터 resultType=json 입력
+UC_SEQ	콘텐츠 ID	11	0		콘텐츠 ID
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+c) 응답 메시지 명세
+항목명(영문)	항목명(국문)	항목크기	항목구분	샘플데이터	항목설명
+numOfRows	한 페이지 결과 수	4	1	10	한 페이지당 표출 데이터 수
+resultCode	결과코드	2	1	00	결과코드
+resultMsg	결과메시지	100	1	OK	결과메시지
+pageNo	페이지 수	4	1	1	페이지 수
+totalCount	데이터 총 개수	4	1	200	데이터 총 개수
+UC_SEQ	콘텐츠ID	11	1	69	콘텐츠ID
+MAIN_TITLE	콘텐츠명	300	0	로스포르쪼	콘텐츠명
+GUGUN_NM	구군	100	0	Gangseo-gu	구군
+LAT	위도	20	0	35.08712	위도
+LNG	경도	20	0	128.90971	경도
+PLACE	장소	300	0	Lo Sforzo	장소
+TITLE	제목	300	0	Raw noodles knead with eggs only	제목
+SUBTITLE	부제목	300	0	Lo Sforzo (로스포르쪼)	부제목
+ADDR1	주소	200	0	29, Myeongji ocean city 7-ro, Gangseo-gu	주소
+ADDR2	주소 기타 	200	0		주소 기타
+CNTCT_TEL	연락처	200	0	051-205-7406	연락처
+HOMEPAGE_URL	홈페이지	200	0	http://huinnyeoul.co.kr	홈페이지
+USAGE_DAY_WEEK_AND_TIME	운영 및 시간	500	0	11:00a.m. ~ 22:00p.m.	운영 및 시간
+RPRSNTV_MENU	대표메뉴	200	0		대표메뉴
+MAIN_IMG_NORMAL	이미지URL	500	0	>/uploadImgs/files/cntnts/20191209161314293_ttiel	이미지URL
+MAIN_IMG_THUMB	썸네일이미지URL	500	0	>/uploadImgs/files/cntnts/20191209161314293_thumbL	썸네일이미지URL
+ITEMCNTNTS	상세내용	1000	0	Lo Sforzo is an Italian restaurant with a great window view. The restaurant building used to be an art gallery and was modified for restaurant. The interior decoration and props are like art works.
+Homemade noodle past using Italian flour and rose pasta is excellent.
+The noodle is made using the dough mixed with eggs, and no water at all. You will find the pasta at Lo Sforzo very healthy.	상세내용
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+d) 요청/응답 메시지 예제
+요청메시지
+http://apis.data.go.kr/6260000/FoodService/getFoodEn?serviceKey=인증키&numOfRows=10&pageNo=1
+응답메시지
+<?xml version="1.0" encoding="UTF-8"?><response>
+  <header>
+    <resultCode>00</resultCode>
+    <resultMsg>NORMAL_CODE</resultMsg>
+  </header>
+  <body>
+    <items>
+      <item>
+        <MAIN_TITLE>로스포르쪼</MAIN_TITLE>
+        <LNG>128.90971</LNG>
+        <UC_SEQ>69</UC_SEQ>
+        <CNTCT_TEL>051-205-7406</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191209161314293_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>Lo Sforzo is an Italian restaurant with a great window view. The restaurant building used to be an art gallery and was modified for restaurant. The interior decoration and props are like art works.
+Homemade noodle past using Italian flour and rose pasta is excellent.
+The noodle is made using the dough mixed with eggs, and no water at all. You will find the pasta at Lo Sforzo very healthy.
+</ITEMCNTNTS>
+        <PLACE>Lo Sforzo</PLACE>
+        <SUBTITLE>Lo Sforzo (로스포르쪼)</SUBTITLE>
+        <ADDR2/>
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>Gangseo-gu</GUGUN_NM>
+        <ADDR1>29, Myeongji ocean city 7-ro, Gangseo-gu</ADDR1>
+        <RPRSNTV_MENU/>
+        <HOMEPAGE_URL/>
+        <TITLE>Raw noodles knead with eggs only</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191209161314293_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.08712</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>만드리곤드레밥</MAIN_TITLE>
+        <LNG>128.95245</LNG>
+        <UC_SEQ>70</UC_SEQ>
+        <CNTCT_TEL>051-941-3669</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191209162810545_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>Usually, dried gondeure (Korean thistle) is used for gondeurebap (thistle rice). But this place uses fresh gondeure and cooks it in a stone pot. Stone pot gondeure set with doenjang jjigae and over ten side dishes is most popular.
+</ITEMCNTNTS>
+        <PLACE>Mandri-gondre-bap</PLACE>
+        <SUBTITLE>Mandri-gondre-bap (만드리곤드레밥)</SUBTITLE>
+        <ADDR2/>
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>Gangseo-gu</GUGUN_NM>
+        <ADDR1>13, Gonghangap-gil 85beon-gil, Gangseo-gu</ADDR1>
+        <RPRSNTV_MENU>Dolsot Gondre Set, Smoked Pumpkin Duck</RPRSNTV_MENU>
+        <HOMEPAGE_URL/>
+        <TITLE>Solve a meal with healthy and full</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191209162810545_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.177387</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>만호갈미 샤브샤브</MAIN_TITLE>
+        <LNG>128.92914</LNG>
+        <UC_SEQ>72</UC_SEQ>
+        <CNTCT_TEL>051-271-4389</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191216135832825_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>The restaurant specializes in hen clams and offers a variety of dishes—shabu-shabu, steamed, and grilled. Also famous for their hearty soup, hen clam shabu shabu and steamed clams are the top picks.
+</ITEMCNTNTS>
+        <PLACE>Manho-galmi Shabu Shabu</PLACE>
+        <SUBTITLE>Manho-galmi Shabu Shabu (만호갈미 샤브샤브)</SUBTITLE>
+        <ADDR2/>
+        <USAGE_DAY_WEEK_AND_TIME>12:00p.m. ~ 21:30p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>Gangseo-gu</GUGUN_NM>
+        <ADDR1>602 Renault Samsung-daero, Gangseo-gu,</ADDR1>
+        <RPRSNTV_MENU>Galmi Shav-Shav, Galmi Meat</RPRSNTV_MENU>
+        <HOMEPAGE_URL/>
+        <TITLE>Manho-galmi Shabu Shabu</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191216135832825_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.101425</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>명지할매재첩국</MAIN_TITLE>
+        <LNG>128.90948</LNG>
+        <UC_SEQ>73</UC_SEQ>
+        <CNTCT_TEL>051-271-1207</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217113159296_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>A specialized Jachup dish restaurant located at Myungji Ocean Center. As Jachup is good for recovering fatigue and energy by activating the liver function, it is well known as a broth to chase a hangover. As its Jachup soup is refreshing the inside, it is good for it. The taste of Jachuphoe that taking out Jachup and mixing with chokochujang and vegetables is great for chewing.
+</ITEMCNTNTS>
+        <PLACE>Myeongji Halme Jaecheopguk</PLACE>
+        <SUBTITLE>Myeongji Halme Jaecheopguk (명지할매재첩국)</SUBTITLE>
+        <ADDR2/>
+        <USAGE_DAY_WEEK_AND_TIME>07:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>Gangseo-gu</GUGUN_NM>
+        <ADDR1>41-6, Myeongji ocean city 7-ro, Gangseo-gu</ADDR1>
+        <RPRSNTV_MENU>Jaecheopguk, Jaechuphoe With Rice</RPRSNTV_MENU>
+        <HOMEPAGE_URL/>
+        <TITLE>Jachup soup suitable for haejangkuk as well</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217113159296_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.08626</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>길스시													</MAIN_TITLE>
+        <LNG>129.05461</LNG>
+        <UC_SEQ>74</UC_SEQ>
+        <CNTCT_TEL>051-804-3690</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217095239551_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>A specialized sushi restaurant located at Seomyun, Busan. They cook every dish with alkali ion water. Alkali ion water helps digestion and the discharge of waste in the body at the same time. You can try Gil sushi set, Jirashi sushi, course menu, sushi lunchbox, and various sakes. Try the Gil sushi that makes your eyes joyful and taste is good.
+</ITEMCNTNTS>
+        <PLACE>Gil Sushi</PLACE>
+        <SUBTITLE>Gil Sushi (길스시)</SUBTITLE>
+        <ADDR2/>
+        <USAGE_DAY_WEEK_AND_TIME>12:00p.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>Busanjin-gu</GUGUN_NM>
+        <ADDR1>71, Bujeon-ro, Busanjin-gu</ADDR1>
+        <RPRSNTV_MENU>Sushi , Sashimi Course</RPRSNTV_MENU>
+        <HOMEPAGE_URL/>
+        <TITLE>Cook every dish with alkali ion water</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217095239551_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.156452</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>몽도르</MAIN_TITLE>
+        <LNG>128.81042</LNG>
+        <UC_SEQ>75</UC_SEQ>
+        <CNTCT_TEL>010-3877-0526</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217112934725_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>Café Mont D’Or boasts a great ocean view of the Gadeok-do Island. In addition to the unforgettable ocean view during sunrises and sunsets, Mont D’or Café offers the customers one of the best tasting coffee you ever had. Mont D’Or is one of the three most popular coffee houses in Los Angeles (in addition to Intelligentsia and Stumptown) and uses the coffee beans from Lamill Café, the first general specialty coffee house in Los Angeles, and the espresso machines made by La Marzocco espresso, which is undoubtedly No. 1 in the world.
+</ITEMCNTNTS>
+        <PLACE>Mont D’Or</PLACE>
+        <SUBTITLE>Mont D’Or (몽도르)</SUBTITLE>
+        <ADDR2/>
+        <USAGE_DAY_WEEK_AND_TIME>10:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>Gangseo-gu</GUGUN_NM>
+        <ADDR1>600, Gadeokhaean-ro, Gangseo-gu</ADDR1>
+        <RPRSNTV_MENU>Redvelvet Cake, Americano</RPRSNTV_MENU>
+        <HOMEPAGE_URL/>
+        <TITLE>Unforgettable sunrise with the ocean view</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217112934725_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.04261</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>동보성</MAIN_TITLE>
+        <LNG>129.05563</LNG>
+        <UC_SEQ>76</UC_SEQ>
+        <CNTCT_TEL>051-816-1649</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217100843590_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>In this restaurant, you will be able to taste the authentic Peking and Sichuan style cuisine! Located in the basement of Yuwon Officetel in front of YoungKwang Book Store in Seomyeon, you can enjoy a variety of Chinese foods in traditional Chinese style atmosphere with great service.
+The chef-owner with 30 years of experience buys the freshest ingredients every morning and make foods. The restaurant has taste atmosphere that are differentiated from other Chinese restaurants.
+
+</ITEMCNTNTS>
+        <PLACE>Dongboseong</PLACE>
+        <SUBTITLE>Dongboseong (동보성)</SUBTITLE>
+        <ADDR2/>
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>Busanjin-gu</GUGUN_NM>
+        <ADDR1>27, Seomyeonmunhwa-ro, Busanjin-gu</ADDR1>
+        <RPRSNTV_MENU>Jjambong, Sweet and sour meat</RPRSNTV_MENU>
+        <HOMEPAGE_URL/>
+        <TITLE>Purchases fresh materials in person together with cooking and management</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217100843590_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.15959</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>민물가든</MAIN_TITLE>
+        <LNG>128.89468</LNG>
+        <UC_SEQ>77</UC_SEQ>
+        <CNTCT_TEL>051-971-8428</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217101816206_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>This braised fish restaurant has been operating for 30 years,known for cooking traditionally with wooden steamers. Using seasoning made from more than 20 different ingredients, their most famous dishes are braised carp with aged kimchi and braised carp.
+</ITEMCNTNTS>
+        <PLACE>MinmulGarden</PLACE>
+        <SUBTITLE>MinmulGarden (민물가든)</SUBTITLE>
+        <ADDR2/>
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>Gangseo-gu</GUGUN_NM>
+        <ADDR1>5, Dunchijungang-gil, Gangseo-gu</ADDR1>
+        <RPRSNTV_MENU>Boiled With Seasongings For Carp With Old Kimchi, Steamed Carp</RPRSNTV_MENU>
+        <HOMEPAGE_URL/>
+        <TITLE>Steam cooking following to the old way</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217101816206_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.16055</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>마당집</MAIN_TITLE>
+        <LNG>129.05458</LNG>
+        <UC_SEQ>78</UC_SEQ>
+        <CNTCT_TEL>051-806-8602</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217101924575_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>The restaurant is famous for meat, stone pot rice, and soon-tofu dish. The beef served in the house is an authentic Korean beef and is soft and tasty, which makes it popular.
+The stone pot rice made with sweet rice, black beans, red beans, chestnuts and jujube and doenjang stew boiled over charcoal fire is a health food that preserves the traditional Korean taste, which is delicious and nutritious.
+
+</ITEMCNTNTS>
+        <PLACE>Madang-jip</PLACE>
+        <SUBTITLE>Madang-jip (마당집)</SUBTITLE>
+        <ADDR2/>
+        <USAGE_DAY_WEEK_AND_TIME>11:30a.m. ~ 22:30p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>Busanjin-gu</GUGUN_NM>
+        <ADDR1>69, Bujeon-ro, Busanjin-gu</ADDR1>
+        <RPRSNTV_MENU>Saeng Galibisal, Korean dolsot set</RPRSNTV_MENU>
+        <HOMEPAGE_URL/>
+        <TITLE>The meat texture is soft and the taste is good</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217101924575_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.15627</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>민물집</MAIN_TITLE>
+        <LNG>128.88205</LNG>
+        <UC_SEQ>79</UC_SEQ>
+        <CNTCT_TEL>051-971-7798</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217112704984_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>A specialized catfish spicy pot restaurant located in nearby Let’s Run Park, Busan-Gyeongnam.
+It is served in a big pot and it is nice to boil it on a bunner. Especially, the catfish spicy pot is refreshing and spicy which is addictive. You can finish a bowl of rice at once. If you want to taste the pure freshwater fish, go there.
+</ITEMCNTNTS>
+        <PLACE>Minmuljip</PLACE>
+        <SUBTITLE>Minmuljip (민물집)</SUBTITLE>
+        <ADDR2/>
+        <USAGE_DAY_WEEK_AND_TIME>10:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>Gangseo-gu</GUGUN_NM>
+        <ADDR1>10, Garak-daero 900beonga-gil, Gangseo-gu</ADDR1>
+        <RPRSNTV_MENU>Eel Roast, Carp Pot</RPRSNTV_MENU>
+        <HOMEPAGE_URL/>
+        <TITLE>Finish a bowl of rice at once</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217112704984_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.151657</LAT>
+      </item>
+    </items>
+    <numOfRows>10</numOfRows>
+    <pageNo>1</pageNo>
+    <totalCount>200</totalCount>
+  </body>
+</response>
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+
+3) [부산맛집 일문 정보] 상세기능명세
+a) 상세기능정보
+상세기능 번호	3	상세기능 유형	조회
+상세기능명(국문)	부산맛집 일문 정보
+상세기능 설명	부산맛집 이름, 제목, 좌표, 상세정보, 이미지 등 일문 정보 조회하는 기능
+Call Back URL	http://apis.data.go.kr/6260000/FoodService/getFoodJa
+최대 메시지 사이즈	[4000] byte
+평균 응답 시간	[500] ms	초당 최대 트랙잭션	[30] tps
+b) 요청 메시지 명세
+항목명(영문)	항목명(국문)	항목크기	항목구분	샘플데이터	항목설명
+serviceKey	인증키	100	1	인증키
+(URL Encode)	공공데이터포털에서 발급받은 인증키
+numOfRows	한 페이지 결과 수	4	1	10	한 페이지 결과 수
+pageNo	페이지 번호	4	1	1	페이지 번호
+resultType	JSON방식 호출	4	0		JSON방식으로 호출 시 파라미터 resultType=json 입력
+UC_SEQ	콘텐츠 ID	11	0		콘텐츠 ID
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+c) 응답 메시지 명세
+항목명(영문)	항목명(국문)	항목크기	항목구분	샘플데이터	항목설명
+numOfRows	한 페이지 결과 수	4	1	10	한 페이지당 표출 데이터 수
+resultCode	결과코드	2	1	00	결과코드
+resultMsg	결과메시지	100	1	OK	결과메시지
+pageNo	페이지 수	4	1	1	페이지 수
+totalCount	데이터 총 개수	4	1	200	데이터 총 개수
+UC_SEQ	콘텐츠ID	11	1	69	콘텐츠ID
+MAIN_TITLE	콘텐츠명	300	0	로스포르쪼	콘텐츠명
+GUGUN_NM	구군	100	0	江西区	구군
+LAT	위도	20	0	35.08712	위도
+LNG	경도	20	0	128.90971	경도
+PLACE	장소	300	0	ロースポルチョ	장소
+TITLE	제목	300	0	卵だけで練った生麺	제목
+SUBTITLE	부제목	300	0	ロースポルチョ (로스포르쪼)	부제목
+ADDR1	주소	200	0	江西区 鳴旨ローシャンシティ7路 29	주소
+ADDR2	주소 기타 	200	0		주소 기타 
+CNTCT_TEL	연락처	200	0	051-205-7406	연락처
+HOMEPAGE_URL	홈페이지	200	0	http://huinnyeoul.co.kr	홈페이지
+USAGE_DAY_WEEK_AND_TIME	운영 및 시간	500	0	11:00a.m. ~ 22:00p.m.	운영 및 시간
+RPRSNTV_MENU	대표메뉴	200	0	アーリオ・オーリオ, ボンゴレ	대표메뉴
+MAIN_IMG_NORMAL	이미지URL	500	0	>/uploadImgs/files/cntnts/20191209161314293_ttiel	이미지URL
+MAIN_IMG_THUMB	썸네일이미지URL	500	0	>/uploadImgs/files/cntnts/20191209161314293_thumbL	썸네일이미지URL
+ITEMCNTNTS	상세내용	1000	0	美しい景色を望む、イタリア料理専門店。かつてギャラリーとして使われていた建物をレストランにリフォームした店で、インテリア小物の一つ一つにまでこだわりが感じられる。イタリア産の小麦粉で作った自家製の生パスタ、ロゼパスタが人気メニュー。特に、生パスタは、水を一切使わず、卵だけで生地を作っている。パスタを食べることで健康になるような気分にさせてくれる 。	상세내용
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+d) 요청/응답 메시지 예제
+요청메시지
+http://apis.data.go.kr/6260000/FoodService/getFoodJa?serviceKey=인증키&numOfRows=10&pageNo=1
+응답메시지
+<response>
+  <header>
+    <resultCode>00</resultCode>
+    <resultMsg>NORMAL_CODE</resultMsg>
+  </header>
+  <body>
+    <items>
+      <item>
+        <MAIN_TITLE>로스포르쪼</MAIN_TITLE>
+        <LNG>128.90971</LNG>
+        <UC_SEQ>69</UC_SEQ>
+        <CNTCT_TEL>051-205-7406</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191209161314293_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>美しい景色を望む、イタリア料理専門店。かつてギャラリーとして使われていた建物をレストランにリフォームした店で、インテリア小物の一つ一つにまでこだわりが感じられる。イタリア産の小麦粉で作った自家製の生パスタ、ロゼパスタが人気メニュー。特に、生パスタは、水を一切使わず、卵だけで生地を作っている。パスタを食べることで健康になるような気分にさせてくれる 。
+</ITEMCNTNTS>
+        <PLACE>ロースポルチョ</PLACE>
+        <SUBTITLE>ロースポルチョ (로스포르쪼)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区 鳴旨ローシャンシティ7路 29</ADDR1>
+        <RPRSNTV_MENU>アーリオ・オーリオ, ボンゴレ</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>卵だけで練った生麺</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191209161314293_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.08712</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>만드리곤드레밥</MAIN_TITLE>
+        <LNG>128.9524</LNG>
+        <UC_SEQ>70</UC_SEQ>
+        <CNTCT_TEL>051-941-3669</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191209162810545_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>炊き立てのゴンドゥレナムルの釜飯をメインに、10種以上のおかずを一緒に楽しむことができるマンドゥリゴ ンドゥレ定食は、この店のメインメニュー。
+
+一緒に添えられたタレと一緒にいただくのが基本であるが、一緒に提供される他のナムルおかずを入れてビビンバにしていただくとよりボリューミな食事ができる。また食事の後には釜飯のおこげをふかして締めとして食事を終わらせる。健康と味を両方考えた食事。
+</ITEMCNTNTS>
+        <PLACE>マンドゥリゴンドゥレパブ</PLACE>
+        <SUBTITLE>マンドゥリゴンドゥレパブ (만드리곤드레밥)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1> 江西区 空港アプギル 85番ギル 13</ADDR1>
+        <RPRSNTV_MENU>コンドゥレ釜飯定食, 燻製鴨カボチャ蒸し</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>ヘルシーで満腹感 のある食</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191209162810545_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.177387</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>만호갈미 샤브샤브</MAIN_TITLE>
+        <LNG>128.92917</LNG>
+        <UC_SEQ>72</UC_SEQ>
+        <CNTCT_TEL>051-271-4389</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191216135832825_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>身がプリプリとしたバカガイのしゃぶしゃぶが人気メニューのバカガイ専門の刺身店。やや耳慣れないバカガイはアオヤギとも呼ばれ、煮ても身が固くならないのが特長。この食材をテーマに考案したバカガイ＆サムギョプサルとバカガイのしゃぶしゃぶ、ゆでバカガイ、寄せ鍋がこの店の代表メニュー。特に、バカガイのしゃぶしゃぶは、貝のだしがたっぷり出たあっさり味のスープで有名。
+</ITEMCNTNTS>
+        <PLACE>マンホカルミシャブシャブ</PLACE>
+        <SUBTITLE>マンホカルミシャブシャブ (만호갈미 샤브샤브)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>12:00p.m. ~ 21:30p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区 ルノーサムスン大路 602</ADDR1>
+        <RPRSNTV_MENU>トリガイのしゃぶしゃぶ, ゆでバカガイ</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>丸々と太ったバカガイの身を入れて楽しむしゃぶしゃぶ</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191216135832825_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.101143</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>명지할매재첩국</MAIN_TITLE>
+        <LNG>128.90948</LNG>
+        <UC_SEQ>73</UC_SEQ>
+        <CNTCT_TEL>051-271-1207</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217113159296_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>鳴旨オーシャンシティに位置するシジミ料理専門店。シジミスープは肝臓の機能を活性化して疲労を回復させる効果があり、酔い覚ましスープとして広く知られている。
+ここのシジミスープはすっきりとした味で酔い覚ましスープとしてぴったりである。また、シジミの身だけを酢ゴチュジャン（チョゴチュジャン）や様々な野菜と和えたシジミの刺身は甘酸っぱく、歯ごたえのある味が絶品である。
+</ITEMCNTNTS>
+        <PLACE>鳴旨ハルメチェチョプクク</PLACE>
+        <SUBTITLE>鳴旨ハルメチェチョプクク (명지할매재첩국)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>07:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区 鳴旨オーシャンシティ7路 41-6</ADDR1>
+        <RPRSNTV_MENU>ジェチョプクク, シジミ丼ジ</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>酔い覚ましスープとしてぴったりのシジミスープ</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217113159296_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.08626</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>길스시													</MAIN_TITLE>
+        <LNG>129.05461</LNG>
+        <UC_SEQ>74</UC_SEQ>
+        <CNTCT_TEL>051-804-3690</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217095239551_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>釜山の西面に位置する寿司専門店である「キル寿司」。全ての料理はアルカリイオン水を使って作っている。アルカリイオン水は消化を助けると同時に、体内の老廃物を排出するのに役立つ水という。キル寿司セット寿司、ちらし寿司、コース料理、寿司弁当、そして様々な酒を味わえる場所である。目で見て楽しく味も良いキル寿司を味わってみよう。
+</ITEMCNTNTS>
+        <PLACE>キル寿司 </PLACE>
+        <SUBTITLE>キル寿司  (길스시)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>12:00p.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>釜山鎮区</GUGUN_NM>
+        <ADDR1>釜山鎮区 釜田路 71</ADDR1>
+        <RPRSNTV_MENU>すし, さしみコース</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>全ての料理はアルカリイオン水を使用</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217095239551_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.156452</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>몽도르</MAIN_TITLE>
+        <LNG>128.81042</LNG>
+        <UC_SEQ>75</UC_SEQ>
+        <CNTCT_TEL>010-3877-0526</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217112934725_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>加德島のオーシャンビューを誇る素敵なカフェ。海の眺めと共に、印象的な日の出、日没を見ることができるモンドールカフェでは、見る楽しさに加えて、最高のコーヒーも提供している。インテリジェンシアとスタンプタウンと肩を並べて、LAスペシャルティーコーヒー第１世代であるラミルコーヒー豆と、世界２位のエスプレスマシンであるラ・マルゾッコを使用しているコーヒー専門店。
+ほのかに残るキャラメルの甘い香りと、コーヒー豆の存在感のある味が絶妙なバランスを成している。
+</ITEMCNTNTS>
+        <PLACE>モンドール</PLACE>
+        <SUBTITLE>モンドール (몽도르)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>10:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1> 江西区 加德海岸路 600</ADDR1>
+        <RPRSNTV_MENU>レッドケーキ, アメリカーノ</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>オーシャンビューとともに忘れられない日の出</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217112934725_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.04261</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>동보성</MAIN_TITLE>
+        <LNG>129.05563</LNG>
+        <UC_SEQ>76</UC_SEQ>
+        <CNTCT_TEL>051-816-1649</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217100843590_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>中華料理の真髄の「北京料理」、「四川料理」を現地の味と雰囲気のままで楽しめる店！西面の栄光図書の向う側のユウォンオピステル地下にあるドンボソンは伝統的な中国風の雰囲気に徹底した衛生管理と客対応でさまざまな中華料理を味わうことができるチャイナレストラン。30年経歴の厨房長が毎朝直接市場で新鮮な材料を仕入れて調理し、経営しているドンボソンは他の中華
+</ITEMCNTNTS>
+        <PLACE>ドンボソン</PLACE>
+        <SUBTITLE>ドンボソン (동보성)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>釜山鎮区</GUGUN_NM>
+        <ADDR1>鎮区書面文化路27（釜田洞）</ADDR1>
+        <RPRSNTV_MENU>ちゃんぽん, 酢豚</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>新鮮な材料を直接購入して料理はもちろん、経営まで</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217100843590_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.15959</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>민물가든</MAIN_TITLE>
+        <LNG>128.89459</LNG>
+        <UC_SEQ>77</UC_SEQ>
+        <CNTCT_TEL>051-971-8428</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217101816206_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>開店30年の元祖蒸し物専門店のミンムルガーデン。昔ながらの調理法にこだわり、木のせいろと蒸気で作る蒸し物を専門とし、代々受け継がれてきた秘法で20種類の薬味ダレを低温で熟成させ、材料と共に1時間かけて蒸し上げる蒸し物が絶品である。
+メインと共に、直接栽培した新鮮な野菜で作ったおかずが提供される。
+ミンムルガーデンの代表メニューは、コイの蒸し物とスッポンと鶏肉のコイのスープ、フナと熟成キムチの煮付け。
+</ITEMCNTNTS>
+        <PLACE>ミンムルガーデン</PLACE>
+        <SUBTITLE>ミンムルガーデン (민물가든)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区 屯致中央キル5 </ADDR1>
+        <RPRSNTV_MENU>フナチム, ムグンチブンオチョリム</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>伝統方式そのまま蒸し物を作る。</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217101816206_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.160496</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>마당집</MAIN_TITLE>
+        <LNG>129.05458</LNG>
+        <UC_SEQ>78</UC_SEQ>
+        <CNTCT_TEL>051-806-8602</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217101924575_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>上質な肉、釜飯、スンドゥブの有名な店で、長い伝統を持つドンボソンは山地から直送している韓牛で、肉質が柔らかく、味がよく人気が多い。モチ米、黒豆、アズキ、栗、ナツメなどさまざまな材料を入れて炊いた釜飯と一緒にいただく炭火の上で煮込んだテンジャンチゲは韓国固有の味で栄養も高く、食欲をそそる最高の保養食である
+</ITEMCNTNTS>
+        <PLACE>マダンチブ</PLACE>
+        <SUBTITLE>マダンチブ (마당집)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:30a.m. ~ 22:30p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>釜山鎮区</GUGUN_NM>
+        <ADDR1>釜山鎮区釜田路69(釜田洞）</ADDR1>
+        <RPRSNTV_MENU>カルビ, 釜飯韓定食</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>肉質が柔らかく、肉の味が良い。</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217101924575_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.15627</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>민물집</MAIN_TITLE>
+        <LNG>128.88205</LNG>
+        <UC_SEQ>79</UC_SEQ>
+        <CNTCT_TEL>051-971-7798</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217112704984_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>レッツランパーク 釜山慶南の近くに位置するナマズの辛味スープ専門店。大きい鍋に材料が入ってテーブルにあるガスバーナーで弱火で煮ながら食べるので、本来の味わいを味わえる。
+特に、ナマズの辛味スープはピリッと辛くてすっきりとした味がクセになる。ご飯1杯はさっさと食べられる。
+淡水魚の淡白な味をちゃんと感じたいなら、ミンムルチプへ行ってみよう。
+</ITEMCNTNTS>
+        <PLACE>ミンムルチプ</PLACE>
+        <SUBTITLE>ミンムルチプ (민물집)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>10:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区 駕洛大路900番ガキル 10</ADDR1>
+        <RPRSNTV_MENU>ウナギ焼き, フナのスープ</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>ご飯1杯はさっさと食べられる。</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217112704984_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.151657</LAT>
+      </item>
+    </items>
+    <numOfRows>10</numOfRows>
+    <pageNo>1</pageNo>
+    <totalCount>200</totalCount>
+  </body>
+</response>
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+4) [부산맛집 중문 간체 정보] 상세기능명세
+a) 상세기능정보
+상세기능 번호	4	상세기능 유형	조회
+상세기능명(국문)	부산맛집 중문 간체 정보
+상세기능 설명	부산맛집 이름, 제목, 좌표, 상세정보, 이미지 등 중문 간체 정보 조회하는 기능
+Call Back URL	http://apis.data.go.kr/6260000/FoodService/getFoodZhs
+최대 메시지 사이즈	[4000] byte
+평균 응답 시간	[500] ms	초당 최대 트랙잭션	[30] tps
+b) 요청 메시지 명세
+항목명(영문)	항목명(국문)	항목크기	항목구분	샘플데이터	항목설명
+serviceKey	인증키	100	1	인증키
+(URL Encode)	공공데이터포털에서 발급받은 인증키
+numOfRows	한 페이지 결과 수	4	1	10	한 페이지 결과 수
+pageNo	페이지 번호	4	1	1	페이지 번호
+resultType	JSON방식 호출	4	0		JSON방식으로 호출 시 파라미터 resultType=json 입력
+UC_SEQ	콘텐츠 ID	11	0		콘텐츠 ID
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+c) 응답 메시지 명세
+항목명(영문)	항목명(국문)	항목크기	항목구분	샘플데이터	항목설명
+numOfRows	한 페이지 결과 수	4	1	10	한 페이지당 표출 데이터 수
+resultCode	결과코드	2	1	00	결과코드
+resultMsg	결과메시지	100	1	OK	결과메시지
+pageNo	페이지 수	4	1	1	페이지 수
+totalCount	데이터 총 개수	4	1	200	데이터 총 개수
+UC_SEQ	콘텐츠ID	11	1	69	콘텐츠ID
+MAIN_TITLE	콘텐츠명	300	0	로스포르쪼	콘텐츠명
+GUGUN_NM	구군	100	0	江西区	구군
+LAT	위도	20	0	35.08712	위도
+LNG	경도	20	0	128.90971	경도
+PLACE	장소	300	0	Lo Sforzo	장소
+TITLE	제목	300	0	仅使用鸡蛋和面后制作的面条	제목
+SUBTITLE	부제목	300	0	Lo Sforzo (로스포르쪼)	부제목
+ADDR1	주소	200	0	江西区鸣旨海洋城7路29	주소
+ADDR2	주소 기타 	200			주소 기타 
+CNTCT_TEL	연락처	200	0	051-205-7406	연락처
+HOMEPAGE_URL	홈페이지	200	0	http://huinnyeoul.co.kr	홈페이지
+USAGE_DAY_WEEK_AND_TIME	운영 및 시간	500	0	11:00a.m. ~ 22:00p.m.	운영 및 시간
+RPRSNTV_MENU	대표메뉴	200	0		대표메뉴
+MAIN_IMG_NORMAL	이미지URL	500	0	>/uploadImgs/files/cntnts/20191209161314293_ttiel	이미지URL
+MAIN_IMG_THUMB	썸네일이미지URL	500	0	>/uploadImgs/files/cntnts/20191209161314293_thumbL	썸네일이미지URL
+ITEMCNTNTS	상세내용	1000	0		상세내용
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+d) 요청/응답 메시지 예제
+요청메시지
+http://apis.data.go.kr/6260000/FoodService/getFoodZhs?serviceKey=인증키&numOfRows=10&pageNo=1
+응답메시지
+<response>
+  <header>
+    <resultCode>00</resultCode>
+    <resultMsg>NORMAL_CODE</resultMsg>
+  </header>
+  <body>
+    <items>
+      <item>
+        <MAIN_TITLE>로스포르쪼</MAIN_TITLE>
+        <LNG>128.90971</LNG>
+        <UC_SEQ>69</UC_SEQ>
+        <CNTCT_TEL>051-205-7406</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191209161314293_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>
+</ITEMCNTNTS>
+        <PLACE>Lo Sforzo</PLACE>
+        <SUBTITLE>Lo Sforzo (로스포르쪼)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME />
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区鸣旨海洋城7路29</ADDR1>
+        <RPRSNTV_MENU />
+        <HOMEPAGE_URL />
+        <TITLE>仅使用鸡蛋和面后制作的面条</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191209161314293_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.08712</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>만드리곤드레밥</MAIN_TITLE>
+        <LNG>128.9524</LNG>
+        <UC_SEQ>70</UC_SEQ>
+        <CNTCT_TEL>051-941-3669</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191209162810545_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>提供刚从石锅中做出来的山蓟菜饭和十多种小菜的山蓟菜饭套餐是这家餐厅的主打菜。
+
+不仅可以放入提供的调料品尝，还可以将提供的小菜放入饭中拌着吃，会感受到更加丰富的山蓟菜饭的美味。还可以在用完餐后，将石锅锅底中的锅巴作为甜点食用。在这里你可以享用健康又美味的一顿。
+</ITEMCNTNTS>
+        <PLACE>满德丽山蓟菜饭</PLACE>
+        <SUBTITLE>满德丽山蓟菜饭 (만드리곤드레밥)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区空港前街85号街13</ADDR1>
+        <RPRSNTV_MENU>石锅山蓟菜套餐, 南瓜熏制鸭肉</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>享用健康满满的一餐</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191209162810545_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.177387</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>만호갈미 샤브샤브</MAIN_TITLE>
+        <LNG>128.92917</LNG>
+        <UC_SEQ>72</UC_SEQ>
+        <CNTCT_TEL>051-271-4389</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191216135832825_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>因放入丰满的蛤蜊肉的火锅而著名的改良蛤蜊刺身店。名称有些生疏的改良蛤蜊具有放入水中也不同意熟透的特征，利用该改良蛤蜊开发的烤改良蛤蜊&amp;五花肉、改良蛤蜊火锅、改良蛤蜊熟肉、火锅是本店的代表美食。由于改良蛤蜊火锅的汤是经过了蛤蜊的浸泡，其汤味非常爽口。
+</ITEMCNTNTS>
+        <PLACE>满浩海鸥火锅</PLACE>
+        <SUBTITLE>满浩海鸥火锅 (만호갈미 샤브샤브)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>12:00p.m. ~ 21:30p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区雷诺三星大道602</ADDR1>
+        <RPRSNTV_MENU>蛤蜊火锅, 瓜参熟肉</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>放入了饱满凹线蛤蜊肉的火锅</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191216135832825_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.101143</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>명지할매재첩국</MAIN_TITLE>
+        <LNG>128.90948</LNG>
+        <UC_SEQ>73</UC_SEQ>
+        <CNTCT_TEL>051-271-1207</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217113159296_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>位于鸣旨海洋城的河蚬料理店。由于河蚬具有激活肝功能，解除疲劳并恢复元气的效果而被当做是下酒汤。
+
+这里的河蚬汤非常爽口，非常适合做解酒汤。捞出河蚬后用辣酱和各种蔬菜凉拌的河蚬生鱼片具有酸甜的美味。
+</ITEMCNTNTS>
+        <PLACE>鸣旨奶奶河蚬汤</PLACE>
+        <SUBTITLE>鸣旨奶奶河蚬汤 (명지할매재첩국)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>07:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区鸣旨海洋城7路41-6</ADDR1>
+        <RPRSNTV_MENU>蚬汤, 蚬子生鱼片盖饭蚬汤</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>作为解酒汤也非常适合的河蚬汤</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217113159296_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.08626</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>길스시													</MAIN_TITLE>
+        <LNG>129.05461</LNG>
+        <UC_SEQ>74</UC_SEQ>
+        <CNTCT_TEL>051-804-3690</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217095239551_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>位于釜山西面的寿司专门店Gil寿司。这里的料理都是用碱离子水制作。碱离子水被称为是可以帮助消化，排出体内污垢的水。在这里可以品尝到Gil寿司套餐寿司、飞鱼籽寿司、套餐料理、寿司便当以及各种寿司。前来品尝能够大饱眼福和口福的Gil寿司。
+</ITEMCNTNTS>
+        <PLACE>Gil寿司</PLACE>
+        <SUBTITLE>Gil寿司 (길스시)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>12:00p.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>釜山镇区</GUGUN_NM>
+        <ADDR1>釜山镇区釜田路71</ADDR1>
+        <RPRSNTV_MENU>寿司,  生鱼片</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>具有60年传统的韩牛排骨店</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217095239551_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.156452</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>몽도르</MAIN_TITLE>
+        <LNG>128.81042</LNG>
+        <UC_SEQ>75</UC_SEQ>
+        <CNTCT_TEL>010-3877-0526</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217112934725_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>拥有美丽的加德岛海景的咖啡厅-蒙多尔。在蒙多尔咖啡厅中不仅可以看到美丽的海景和难忘的日出、日落，还会提供品质最好的咖啡。这家咖啡店是使用与知识分子咖啡、树墩城咖啡同为洛杉矶第一代特殊茶咖啡的Lamill咖啡原豆和世界第一浓缩咖啡机-La Marzocco的专业咖啡店。
+焦糖淡淡的甜香和原豆浓郁可口的味道融合的恰到好处。
+</ITEMCNTNTS>
+        <PLACE>蒙多尔</PLACE>
+        <SUBTITLE>蒙多尔 (몽도르)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>10:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区加德海岸路600</ADDR1>
+        <RPRSNTV_MENU>红色蛋糕, 美式咖啡</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>美丽的海景和难以忘怀的日落</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217112934725_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.04261</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>동보성</MAIN_TITLE>
+        <LNG>129.05563</LNG>
+        <UC_SEQ>76</UC_SEQ>
+        <CNTCT_TEL>051-816-1649</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217100843590_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>可以在当地的氛围中品尝到中国料理的精髓“北京烤鸭”及“四川料理”的地方！东宝城位于西面光荣图书对面的游园写字楼地下，在中国风氛围中提供完善的卫生管理和服务，是家可以品尝各种中国美食的中国餐厅。具有30年经验的主人每天早晨都会亲自到市场采购新鲜的材料。东宝城的味道和氛围和其他中餐厅都有差别。餐厅还从中国天津邀请了饺子专家，可以品尝到正宗的中国饺子。
+</ITEMCNTNTS>
+        <PLACE>东宝城</PLACE>
+        <SUBTITLE>东宝城 (동보성)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>釜山镇区</GUGUN_NM>
+        <ADDR1>釜山镇区西面文化路27(釜田洞)</ADDR1>
+        <RPRSNTV_MENU>炒码面, 糖醋肉</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>亲自负责新鲜材料的采购、料理及管理</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217100843590_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.15959</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>민물가든</MAIN_TITLE>
+        <LNG>128.89459</LNG>
+        <UC_SEQ>77</UC_SEQ>
+        <CNTCT_TEL>051-971-8428</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217101816206_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>具有30年传统的元祖蒸煮料理专门店-淡水花园按照过去利用木制蒸笼蒸煮食物的代代相传的 秘法低温发酵20余种调料，蒸煮1小时做出的蒸煮料理非常绝美。还会提供使用亲自栽培的 新鲜蔬菜制作的小菜。淡水花园的代表食物有蒸鲤鱼、甲鱼龙凤汤及泡菜炖鲫鱼。
+</ITEMCNTNTS>
+        <PLACE>淡水花园</PLACE>
+        <SUBTITLE>淡水花园 (민물가든)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区 岸边中央路5</ADDR1>
+        <RPRSNTV_MENU>炖鲫鱼, 泡菜鲤鱼拼盘</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>按照过去的方式制作清蒸料理</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217101816206_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.160496</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>마당집</MAIN_TITLE>
+        <LNG>129.05458</LNG>
+        <UC_SEQ>78</UC_SEQ>
+        <CNTCT_TEL>051-806-8602</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217101924575_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>院子屋以优质的鲜肉、石锅饭、现场制作的嫩豆腐而著名。这家店使用的肉是从山地直接配送的当地韩牛，其肉质鲜嫩，味道可口，非常受客户们的欢迎。用糯米、黑豆、红豆、栗子、大枣等材料制作的石锅饭和用炭火制作的大酱汤是具有韩国传统味道和高营养价值的大补美食。
+</ITEMCNTNTS>
+        <PLACE>院子屋</PLACE>
+        <SUBTITLE>院子屋 (마당집)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:30a.m. ~ 22:30p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>釜山镇区</GUGUN_NM>
+        <ADDR1>釜山镇区釜田路69(釜田洞)</ADDR1>
+        <RPRSNTV_MENU>生排骨肉, 石锅套餐</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>肉质鲜嫩，味道可口</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217101924575_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.15627</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>민물집</MAIN_TITLE>
+        <LNG>128.88205</LNG>
+        <UC_SEQ>79</UC_SEQ>
+        <CNTCT_TEL>051-971-7798</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217112704984_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>位于LetsRunPark釜山庆南附近的辣味鲶鱼汤专门店。这里会用大锅上菜，用炉子煮着吃的味道堪称一绝。
+辣味鲶鱼汤鲜辣的味道会让人上瘾，可以瞬间就能解决一碗米饭。
+如果想要品尝淡水鱼清淡的味道就去淡水之家吧。
+</ITEMCNTNTS>
+        <PLACE>淡水家</PLACE>
+        <SUBTITLE>淡水家 (민물집)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>10:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>江西区</GUGUN_NM>
+        <ADDR1>江西区可乐大路900号街10</ADDR1>
+        <RPRSNTV_MENU>烤鳗鱼, 鲫鱼汤</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>瞬间解决掉一碗米饭</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217112704984_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.151657</LAT>
+      </item>
+    </items>
+    <numOfRows>10</numOfRows>
+    <pageNo>1</pageNo>
+    <totalCount>200</totalCount>
+  </body>
+</response>
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+5) [부산맛집 중문 번체 정보] 상세기능명세
+a) 상세기능정보
+상세기능 번호	5	상세기능 유형	조회
+상세기능명(국문)	부산맛집 중문 번체 정보
+상세기능 설명	부산맛집 이름, 제목, 좌표, 상세정보, 이미지 등 중문 번체 정보 조회하는 기능
+Call Back URL	http://apis.data.go.kr/6260000/FoodService/getFoodZht
+최대 메시지 사이즈	[4000] byte
+평균 응답 시간	[500] ms	초당 최대 트랙잭션	[30] tps
+b) 요청 메시지 명세
+항목명(영문)	항목명(국문)	항목크기	항목구분	샘플데이터	항목설명
+serviceKey	인증키	100	1	인증키
+(URL Encode)	공공데이터포털에서 발급받은 인증키
+numOfRows	한 페이지 결과 수	4	1	10	한 페이지 결과 수
+pageNo	페이지 번호	4	1	1	페이지 번호
+resultType	JSON방식 호출	4	0		JSON방식으로 호출 시 파라미터 resultType=json 입력
+UC_SEQ	콘텐츠 ID	11	0		콘텐츠 ID
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+c) 응답 메시지 명세
+항목명(영문)	항목명(국문)	항목크기	항목구분	샘플데이터	항목설명
+numOfRows	한 페이지 결과 수	4	1	10	한 페이지당 표출 데이터 수
+resultCode	결과코드	2	1	00	결과코드
+resultMsg	결과메시지	100	1	OK	결과메시지
+pageNo	페이지 수	4	1	1	페이지 수
+totalCount	데이터 총 개수	4	1	200	데이터 총 개수
+UC_SEQ	콘텐츠ID	11	1	69	콘텐츠ID
+MAIN_TITLE	콘텐츠명	300	0	로스포르쪼	콘텐츠명
+GUGUN_NM	구군	100	0	市西區	구군
+LAT	위도	20	0	35.08712	위도
+LNG	경도	20	0	128.90971	경도
+PLACE	장소	300	0	Lo Sforzo	장소
+TITLE	제목	300	0	僅用雞蛋混合麵粉的生麵條	제목
+SUBTITLE	부제목	300	0	Lo Sforzo (로스포르쪼)	부제목
+ADDR1	주소	200	0	江西區鳴旨海城7路29	주소
+ADDR2	주소 기타 	200			주소 기타 
+CNTCT_TEL	연락처	200	0	+82-51-205-7406	연락처
+HOMEPAGE_URL	홈페이지	200	0	http://huinnyeoul.co.kr	홈페이지
+USAGE_DAY_WEEK_AND_TIME	운영 및 시간	500	0	11:00a.m. ~ 22:00p.m.	운영 및 시간
+RPRSNTV_MENU	대표메뉴	200	0	蒜香橄欖油義大利麵, 蛤蜊義大利麵	대표메뉴
+MAIN_IMG_NORMAL	이미지URL	500	0	>/uploadImgs/files/cntnts/20191209161314293_ttiel	이미지URL
+MAIN_IMG_THUMB	썸네일이미지URL	500	0	>/uploadImgs/files/cntnts/20191209161314293_thumbL	썸네일이미지URL
+ITEMCNTNTS	상세내용	1000	0	窗外風光優美的義大利餐廳Lo Sforzo，所在建築原為藝廊，後改建為餐廳，使得每一樣裝飾品都猶如藝術品般細膩。以義大利麵粉製作手工生義大利麵條，番茄奶油義大利麵尤其令人印象深刻。
+生麵條在製作時不加入水，僅混入雞蛋，讓人在吃下義大利麵的同時，彷彿也吃進了健康。	상세내용
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+d) 요청/응답 메시지 예제
+요청메시지
+http://apis.data.go.kr/6260000/FoodService/getFoodZht?serviceKey=인증키&numOfRows=10&pageNo=1
+응답메시지
+<response>
+  <header>
+    <resultCode>00</resultCode>
+    <resultMsg>NORMAL_CODE</resultMsg>
+  </header>
+  <body>
+    <items>
+      <item>
+        <MAIN_TITLE>로스포르쪼</MAIN_TITLE>
+        <LNG>128.90971</LNG>
+        <UC_SEQ>69</UC_SEQ>
+        <CNTCT_TEL>+82-51-205-7406</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191209161314293_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>窗外風光優美的義大利餐廳Lo Sforzo，所在建築原為藝廊，後改建為餐廳，使得每一樣裝飾品都猶如藝術品般細膩。以義大利麵粉製作手工生義大利麵條，番茄奶油義大利麵尤其令人印象深刻。
+生麵條在製作時不加入水，僅混入雞蛋，讓人在吃下義大利麵的同時，彷彿也吃進了健康。
+</ITEMCNTNTS>
+        <PLACE>Lo Sforzo</PLACE>
+        <SUBTITLE>Lo Sforzo (로스포르쪼)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>市西區</GUGUN_NM>
+        <ADDR1>江西區鳴旨海城7路29</ADDR1>
+        <RPRSNTV_MENU>蒜香橄欖油義大利麵, 蛤蜊義大利麵</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>僅用雞蛋混合麵粉的生麵條</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191209161314293_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.08712</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>만드리곤드레밥</MAIN_TITLE>
+        <LNG>128.9524</LNG>
+        <UC_SEQ>70</UC_SEQ>
+        <CNTCT_TEL>051-941-3669</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191209162810545_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>以石鍋熱騰騰上桌的山薊菜飯為主，附帶十多種小菜的曼德里山薊菜飯套餐為店裡的代表餐點。
+除了拌入店家準備的調味醬之外，也可以在碗中放入各種涼拌蔬菜後攪拌均勻，享用風味更盛的山薊菜飯。用餐後不妨用石鍋裡的鍋粑泡製而成的鍋粑湯清除口中氣味。
+</ITEMCNTNTS>
+        <PLACE>曼德里山薊菜飯</PLACE>
+        <SUBTITLE>曼德里山薊菜飯 (만드리곤드레밥)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>市西區</GUGUN_NM>
+        <ADDR1>江西區空港前街85號街13</ADDR1>
+        <RPRSNTV_MENU>石鍋山薊菜飯套餐, 南瓜煙燻鴨</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>健康飽足的一餐</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191209162810545_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.177387</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>만호갈미 샤브샤브</MAIN_TITLE>
+        <LNG>128.92917</LNG>
+        <UC_SEQ>72</UC_SEQ>
+        <CNTCT_TEL>051-271-4389</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191216135832825_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>以加入肥嫩鳥蛤的涮涮鍋為人氣料理的鳥蛤專賣生魚片餐廳，名稱稍嫌生疏的鳥蛤最大特色在於即使放入水中煮熟也不會老韌，使用鳥蛤開發出的鳥蛤&amp;烤五花肉、鳥蛤涮涮鍋、清燙鳥蛤、火鍋皆是店內的推薦料理。
+</ITEMCNTNTS>
+        <PLACE>滿湖鳥蛤涮涮鍋</PLACE>
+        <SUBTITLE>滿湖鳥蛤涮涮鍋 (만호갈미 샤브샤브)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>12:00p.m. ~ 21:30p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>市西區</GUGUN_NM>
+        <ADDR1>江西區雷諾三星大路602</ADDR1>
+        <RPRSNTV_MENU>鳥蛤涮涮鍋, 清燙鳥蛤</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>加入肥嫩鳥蛤的涮涮鍋</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191216135832825_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.101143</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>명지할매재첩국</MAIN_TITLE>
+        <LNG>128.90948</LNG>
+        <UC_SEQ>73</UC_SEQ>
+        <CNTCT_TEL>051-271-1207</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217113159296_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>位於鳴旨海城的河蜆料理專賣店，河蜆可活化肝機能，消除疲勞，恢復元氣，適合用來解酒。
+店內販售的河蜆湯讓人五臟舒爽，可謂是最佳的解酒湯。僅使用河蜆肉，拌入醋辣椒醬與各種蔬菜而成的涼拌生河蜆酸甜爽口，令人難忘。
+</ITEMCNTNTS>
+        <PLACE>鳴旨奶奶河蜆湯</PLACE>
+        <SUBTITLE>鳴旨奶奶河蜆湯 (명지할매재첩국)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>07:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>市西區</GUGUN_NM>
+        <ADDR1>江西區鳴旨海城7路41-6</ADDR1>
+        <RPRSNTV_MENU>河蜆湯, 生河蜆蓋飯</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>適合用來醒酒的河蜆湯</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217113159296_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.08626</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>길스시													</MAIN_TITLE>
+        <LNG>129.05461</LNG>
+        <UC_SEQ>74</UC_SEQ>
+        <CNTCT_TEL>051-804-3690</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217095239551_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>位於釜山西面的壽司專賣店，所有料理皆使用鹼性負離子水製成。鹼性負離子水有益消化，並有助於排除體驗老廢物。
+店內提供佶壽司拼盤、散壽司、套餐與壽司便當，以及各式清酒。敬請光臨讓人大飽眼福與口福的佶壽司。
+</ITEMCNTNTS>
+        <PLACE>佶壽司</PLACE>
+        <SUBTITLE>佶壽司 (길스시)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>12:00p.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>釜山鎮區</GUGUN_NM>
+        <ADDR1>釜山鎮區釜田路71</ADDR1>
+        <RPRSNTV_MENU>壽司 , 生魚片套餐</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>所有料理皆使用鹼性負離子水</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217095239551_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.156452</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>몽도르</MAIN_TITLE>
+        <LNG>128.81042</LNG>
+        <UC_SEQ>75</UC_SEQ>
+        <CNTCT_TEL>010-3877-0526 </CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217112934725_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>以加德島海景為傲的優美咖啡館Mont D’Or，除了海景之外，也能欣賞到令人難忘的日出、日落美景，而咖啡更是一絕。店內使用與Intelligentsia、Stumptown齊名的第一代洛杉磯精品咖啡Lamill Coffee咖啡豆，以及全世界第一的義式咖啡機La Marzocco。
+淡雅的焦糖甜美香氣與濃厚香醇咖啡豆間的平衡尤其出色。
+</ITEMCNTNTS>
+        <PLACE>Mont D’Or</PLACE>
+        <SUBTITLE>Mont D’Or (몽도르)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>10:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>市西區</GUGUN_NM>
+        <ADDR1>江西區加德海岸路600(天城洞)</ADDR1>
+        <RPRSNTV_MENU>紅絲絨蛋糕, 美式咖啡</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>海景與令人難忘的日出</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217112934725_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.04261</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>동보성</MAIN_TITLE>
+        <LNG>129.05563</LNG>
+        <UC_SEQ>76</UC_SEQ>
+        <CNTCT_TEL>051-816-1649</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217100843590_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>可品嚐道地的北京料理、四川料理！位於西面榮光圖書對面、You One住商大樓地下樓層的東寶城散發傳統中國氛圍，透過嚴格的衛生管理與服務提供各式中式料理。
+擁有30年經歷的店主每天親自前往市場購買新鮮食材，透過自行料理與經營，體現出有別於他家的美味與氣氛。
+</ITEMCNTNTS>
+        <PLACE>東寶城</PLACE>
+        <SUBTITLE>東寶城 (동보성)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 21:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>釜山鎮區</GUGUN_NM>
+        <ADDR1>釜山鎮區西面文化路27(釜田洞)</ADDR1>
+        <RPRSNTV_MENU>炒碼麵 , 糖醋肉</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>親自選購新鮮食材、料理及經營</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217100843590_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.15959</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>민물가든</MAIN_TITLE>
+        <LNG>128.89459</LNG>
+        <UC_SEQ>77</UC_SEQ>
+        <CNTCT_TEL>051-971-8428</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217101816206_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>以石鍋熱騰騰上桌的山薊菜飯為主，附帶十多種小菜的曼德里山薊菜飯套餐為店裡的代表餐點。
+除了拌入店家準備的調味醬之外，也可以在碗中放入各種涼拌蔬菜後攪拌均勻，享用風味更盛的山薊菜飯。用餐後不妨用石鍋裡的鍋粑泡製而成的鍋粑湯清除口中氣味。
+</ITEMCNTNTS>
+        <PLACE>淡水花園</PLACE>
+        <SUBTITLE>淡水花園 (민물가든)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:00a.m. ~ 23:30p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>市西區</GUGUN_NM>
+        <ADDR1>江西區空港前街85號街13</ADDR1>
+        <RPRSNTV_MENU>石鍋山薊菜飯套餐, 南瓜煙燻鴨</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>健康飽足的一餐</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217101816206_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.160496</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>마당집</MAIN_TITLE>
+        <LNG>129.05458</LNG>
+        <UC_SEQ>78</UC_SEQ>
+        <CNTCT_TEL>051-806-8602</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217101924575_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>以優質鮮肉、石鍋飯與現做嫩豆腐聞名，擁有悠久歷史的庭園家使用產地直送的身土不二韓牛肉，肉質柔嫩，風味絕佳而備受好評。
+以糯米、黑豆、紅豆、栗子、紅棗等各種材料炊煮出的美味石鍋飯搭配炭火滾煮而成的大醬鍋，為傳統的韓國風味，營養且讓人食指大動，可謂是最佳的滋補料理。
+</ITEMCNTNTS>
+        <PLACE>庭園家</PLACE>
+        <SUBTITLE>庭園家 (마당집)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>11:30a.m. ~ 22:30p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>釜山鎮區</GUGUN_NM>
+        <ADDR1>釜山鎮區釜田路69(釜田洞)</ADDR1>
+        <RPRSNTV_MENU>鮮牛肋條 , 石鍋韓定食</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>肉質柔嫩風味絕佳</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217101924575_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.15627</LAT>
+      </item>
+      <item>
+        <MAIN_TITLE>민물집</MAIN_TITLE>
+        <LNG>128.88205</LNG>
+        <UC_SEQ>79</UC_SEQ>
+        <CNTCT_TEL>051-971-7798</CNTCT_TEL>
+        <MAIN_IMG_NORMAL>/uploadImgs/files/cntnts/20191217112704984_ttiel</MAIN_IMG_NORMAL>
+        <ITEMCNTNTS>位於釜山慶南Let's Run Park附近的辣味鯰魚湯專賣店，以大鍋裝盛上桌，邊煮邊吃風味更佳。
+辣味鯰魚湯辣爽，香辣滋味讓人一口接一口，一碗飯瞬間掃空。
+若想品嚐淡水魚的清爽，淡水家會是最好的選擇。
+</ITEMCNTNTS>
+        <PLACE>淡水家</PLACE>
+        <SUBTITLE>淡水家 (민물집)</SUBTITLE>
+        <ADDR2 />
+        <USAGE_DAY_WEEK_AND_TIME>10:00a.m. ~ 22:00p.m.</USAGE_DAY_WEEK_AND_TIME>
+        <GUGUN_NM>市西區</GUGUN_NM>
+        <ADDR1>江西區可樂大路900號街10</ADDR1>
+        <RPRSNTV_MENU>烤鰻魚, 鯽魚湯</RPRSNTV_MENU>
+        <HOMEPAGE_URL />
+        <TITLE>瞬間吃完一碗飯</TITLE>
+        <MAIN_IMG_THUMB>/uploadImgs/files/cntnts/20191217112704984_thumbL</MAIN_IMG_THUMB>
+        <LAT>35.151657</LAT>
+      </item>
+    </items>
+    <numOfRows>10</numOfRows>
+    <pageNo>1</pageNo>
+    <totalCount>200</totalCount>
+  </body>
+</response>
+※ 항목구분 : 필수(1), 옵션(0), 1건 이상 복수건(1..n), 0건 또는 복수건(0..n)
+ 
+2. OpenAPI 에러 코드정리
+에러코드	에러메시지	설명
+00	NORMAL_CODE	정상
+01	APPLICATION_ERROR	어플리케이션 에러
+02	DB_ERROR	데이터베이스 에러
+03	NODATA_ERROR	데이터없음 에러
+04	HTTP_ERROR	HTTP 에러
+05	SERVICETIMEOUT_ERROR	서비스 연결실패 에러
+10	INVALID_REQUEST_PARAMETER_ERROR	잘못된 요청 파라메터 에러
+11	NO_MANDATORY_REQUEST_PARAMETERS_ERROR	필수요청 파라메터가 없음
+12	NO_OPENAPI_SERVICE_ERROR	해당 오픈 API 서비스가 없거나 폐기됨
+20	SERVICE_ACCESS_DENIED_ERROR	서비스 접근거부
+21	TEMPORARILY_DISABLE_THE_SERVICEKEY_ERROR	일시적으로 사용할 수 없는 서비스 키
+22	LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR	서비스 요청제한횟수 초과에러
+30	SERVICE_KEY_IS_NOT_REGISTERED_ERROR	등록되지 않은 서비스키
+31	DEADLINE_HAS_EXPIRED_ERROR	기한만료된 서비스키
+32	UNREGISTERED_IP_ERROR	등록되지 않은 IP
+33	UNSIGNED_CALL_ERROR	서명되지 않은 호출
+99	UNKNOWN_ERROR	기타에러
+

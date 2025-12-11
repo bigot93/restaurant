@@ -1,0 +1,57 @@
+==========================================
+충청북도 우수모범업소 조회 웹사이트 실행 방법
+==========================================
+
+【방법 1】 Python 서버 사용 (가장 간단)
+
+1. Windows 탐색기에서 restaurant 폴더를 엽니다.
+
+2. server.bat 파일을 더블클릭합니다.
+   또는
+   명령 프롬프트(CMD) 또는 PowerShell을 열고:
+   
+   cd C:\Users\07978\Documents\cursorstudy\restaurant
+   python server.py
+
+3. 브라우저가 자동으로 열리거나, 
+   수동으로 http://localhost:8000 으로 접속합니다.
+
+4. 서버를 종료하려면 터미널 창에서 Ctrl+C를 누릅니다.
+
+
+【방법 2】 Node.js 사용 (Node.js가 설치되어 있는 경우)
+
+1. 터미널을 열고 restaurant 폴더로 이동합니다.
+
+2. 다음 명령을 실행합니다:
+   npx http-server -p 8000 --cors
+
+3. 브라우저에서 http://localhost:8000 으로 접속합니다.
+
+
+【방법 3】 VS Code Live Server 사용
+
+1. VS Code에서 restaurant 폴더를 엽니다.
+
+2. index.html 파일을 엽니다.
+
+3. 우클릭 → "Open with Live Server" 선택
+
+
+【주의사항】
+
+⚠️ 파일을 직접 더블클릭해서 열면 (file://) CORS 오류가 발생합니다.
+   반드시 로컬 서버를 통해 실행해야 합니다!
+
+
+【문제 해결】
+
+- Python이 설치되어 있지 않다면:
+  https://www.python.org/downloads/ 에서 Python 3 설치
+
+- 포트 8000이 이미 사용 중이라면:
+  server.py 파일에서 PORT = 8000을 다른 번호로 변경 (예: 8080)
+
+- 브라우저에서 오류가 발생하면:
+  F12를 눌러 개발자 도구를 열고 콘솔 탭에서 오류 메시지를 확인하세요.
+

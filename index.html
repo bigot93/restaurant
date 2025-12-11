@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>부산광역시 부산맛집정보 조회 (React)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: #667eea;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #c33;
+        }
+
+        .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .restaurant-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .restaurant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .restaurant-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .restaurant-info {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .restaurant-info strong {
+            color: #667eea;
+            display: inline-block;
+            min-width: 80px;
+            font-weight: 600;
+        }
+
+        .restaurant-info span {
+            color: #555;
+        }
+
+        .menu-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .stats {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .stats p {
+            font-size: 1.1em;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .stats strong {
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .info-box code {
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <!-- React 18 CDN + Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // API 문서: 부산맛집정보 서비스 (getFoodKr)
+        const API_KEY = '6963e001ce3b550dc369c2add83fa89a03f5c3bd507e66c147494cd3113c3225';
+        const API_URLS = [
+            'http://apis.data.go.kr/6260000/FoodService/getFoodKr',
+            'https://apis.data.go.kr/6260000/FoodService/getFoodKr'
+        ];
+        const USE_CORS_PROXY = false;
+        const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+        const PAGE_SIZE = 12; // 최초 12개, 더 보기 시 12개씩
+
+        // XML 응답을 JSON 형태로 변환
+        const parseXmlToData = (xmlText) => {
+            try {
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(xmlText, 'text/xml');
+                const getText = (tag) => xml.getElementsByTagName(tag)?.[0]?.textContent || '';
+                const totalCount = Number(getText('totalCount')) || 0;
+                const resultCode = getText('resultCode') || getText('code') || '99';
+                const resultMsg = getText('resultMsg') || getText('message') || '';
+
+                const items = Array.from(xml.getElementsByTagName('item')).map((el) => {
+                    const read = (tag) => el.getElementsByTagName(tag)?.[0]?.textContent || '';
+                    return {
+                        UC_SEQ: read('UC_SEQ'),
+                        MAIN_TITLE: read('MAIN_TITLE'),
+                        GUGUN_NM: read('GUGUN_NM'),
+                        LAT: read('LAT'),
+                        LNG: read('LNG'),
+                        PLACE: read('PLACE'),
+                        TITLE: read('TITLE'),
+                        SUBTITLE: read('SUBTITLE'),
+                        ADDR1: read('ADDR1'),
+                        ADDR2: read('ADDR2'),
+                        CNTCT_TEL: read('CNTCT_TEL'),
+                        HOMEPAGE_URL: read('HOMEPAGE_URL'),
+                        USAGE_DAY_WEEK_AND_TIME: read('USAGE_DAY_WEEK_AND_TIME'),
+                        RPRSNTV_MENU: read('RPRSNTV_MENU'),
+                        MAIN_IMG_NORMAL: read('MAIN_IMG_NORMAL'),
+                        MAIN_IMG_THUMB: read('MAIN_IMG_THUMB'),
+                        ITEMCNTNTS: read('ITEMCNTNTS'),
+                    };
+                });
+
+                return {
+                    getFoodKr: {
+                        header: { code: resultCode, message: resultMsg, resultCode, resultMsg },
+                        item: items,
+                        totalCount: totalCount || items.length,
+                    },
+                };
+            } catch {
+                return null;
+            }
+        };
+
+        const parseItems = (data) => {
+            if (data?.getFoodKr?.item) {
+                const items = Array.isArray(data.getFoodKr.item) ? data.getFoodKr.item : [data.getFoodKr.item];
+                const total = data.getFoodKr.totalCount || items.length;
+                return { items, total };
+            }
+            if (data?.response?.body?.items?.item) {
+                const items = Array.isArray(data.response.body.items.item)
+                    ? data.response.body.items.item
+                    : [data.response.body.items.item];
+                const total = data.response.body.totalCount || items.length;
+                return { items, total };
+            }
+            return { items: [], total: 0 };
+        };
+
+        const RestaurantCard = ({ item }) => {
+            const mainTitle = item.MAIN_TITLE || '-';
+            const title = item.TITLE || '';
+            const subtitle = item.SUBTITLE || '';
+            const gugun = item.GUGUN_NM || '';
+            const addr1 = item.ADDR1 || '';
+            const addr2 = item.ADDR2 || '';
+            const tel = item.CNTCT_TEL || '';
+            const homepage = item.HOMEPAGE_URL || '';
+            const hours = item.USAGE_DAY_WEEK_AND_TIME || '';
+            const menu = item.RPRSNTV_MENU || '';
+            const lat = item.LAT || '';
+            const lng = item.LNG || '';
+            const desc = item.ITEMCNTNTS || '';
+            const img = item.MAIN_IMG_NORMAL || '';
+
+            return (
+                <div className="restaurant-card">
+                    <div className="restaurant-name">{mainTitle}</div>
+                    {subtitle && (
+                        <div className="restaurant-info">
+                            <strong>📌 부제목:</strong><span>{subtitle}</span>
+                        </div>
+                    )}
+                    {title && (
+                        <div className="restaurant-info">
+                            <strong>📝 제목:</strong><span>{title}</span>
+                        </div>
+                    )}
+                    {gugun && (
+                        <div className="restaurant-info">
+                            <strong>🏘️ 구군:</strong><span>{gugun}</span>
+                        </div>
+                    )}
+                    {(addr1 || addr2) && (
+                        <div className="restaurant-info">
+                            <strong>📍 주소:</strong><span>{addr1} {addr2}</span>
+                        </div>
+                    )}
+                    {tel && (
+                        <div className="restaurant-info">
+                            <strong>📞 연락처:</strong><span>{tel}</span>
+                        </div>
+                    )}
+                    {homepage && (
+                        <div className="restaurant-info">
+                            <strong>🌐 홈페이지:</strong>
+                            <a href={homepage} target="_blank" rel="noreferrer" style={{ color: '#667eea', textDecoration: 'none' }}>{homepage}</a>
+                        </div>
+                    )}
+                    {hours && (
+                        <div className="restaurant-info">
+                            <strong>🕐 운영시간:</strong><span>{hours}</span>
+                        </div>
+                    )}
+                    {menu && (
+                        <div className="restaurant-info">
+                            <strong>🍴 대표메뉴:</strong><span className="menu-badge">{menu}</span>
+                        </div>
+                    )}
+                    {(lat && lng) && (
+                        <div className="restaurant-info">
+                            <strong>🗺️ 좌표:</strong><span>위도: {lat}, 경도: {lng}</span>
+                        </div>
+                    )}
+                    {desc && (
+                        <div className="restaurant-info">
+                            <strong>📄 상세내용:</strong>
+                            <span style={{ fontSize: '0.9em', color: '#666', display: 'block', marginTop: 5 }}>
+                                {desc.length > 150 ? `${desc.substring(0, 150)}...` : desc}
+                            </span>
+                        </div>
+                    )}
+                    {img && (
+                        <div className="restaurant-info">
+                            <strong>🖼️ 이미지:</strong>
+                            <a href={img} target="_blank" rel="noreferrer" style={{ color: '#667eea', textDecoration: 'none' }}>이미지 보기</a>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [items, setItems] = useState([]);
+            const [filteredItems, setFilteredItems] = useState([]);
+            const [totalCount, setTotalCount] = useState(0);
+            const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState('');
+            const [searchTerm, setSearchTerm] = useState('');
+            const sentinelRef = useRef(null);
+
+            useEffect(() => {
+                const fetchData = async () => {
+                    setLoading(true);
+                    setError('');
+                    for (const baseUrl of API_URLS) {
+                        try {
+                            const encodedKey = encodeURIComponent(API_KEY);
+                            let page = 1;
+                            const pageSize = 500;
+                            let allItems = [];
+                            let total = 0;
+
+                            while (true) {
+                                let url = `${baseUrl}?serviceKey=${encodedKey}&numOfRows=${pageSize}&pageNo=${page}&resultType=json`;
+                                if (USE_CORS_PROXY) url = CORS_PROXY + url;
+
+                                const res = await fetch(url, { headers: { Accept: 'application/json' } });
+                                const text = await res.text();
+
+                                let data;
+                                try {
+                                    data = JSON.parse(text);
+                                } catch {
+                                    data = parseXmlToData(text);
+                                    if (!data) throw new Error('JSON/XML 파싱 실패');
+                                }
+
+                                const header = data.getFoodKr?.header || data.response?.header || data.header;
+                                if (header && ((header.code && header.code !== '00') || (header.resultCode && header.resultCode !== '00'))) {
+                                    throw new Error(header.message || header.resultMsg || 'API 오류');
+                                }
+
+                                const { items, total: t } = parseItems(data);
+                                total = t || total;
+                                if (items.length === 0) break;
+
+                                allItems = allItems.concat(items);
+                                if (allItems.length >= total) break;
+
+                                page += 1;
+                            }
+
+                            setItems(allItems);
+                            setFilteredItems(allItems);
+                            setTotalCount(total || allItems.length);
+                            setLoading(false);
+                            return;
+                        } catch (err) {
+                            console.error('API 시도 실패:', err);
+                            setError(err.message);
+                            setLoading(false);
+                        }
+                    }
+                };
+
+                fetchData();
+            }, []);
+
+            // items 변경 시 필터 초기화
+            useEffect(() => {
+                setFilteredItems(items);
+                setVisibleCount(PAGE_SIZE);
+            }, [items]);
+
+            const handleSearch = () => {
+                const term = searchTerm.trim().toLowerCase();
+                if (!term) {
+                    setFilteredItems(items);
+                    setVisibleCount(PAGE_SIZE);
+                    return;
+                }
+                const filtered = items.filter((item) => {
+                    const nameFields = [
+                        item.MAIN_TITLE,
+                        item.TITLE,
+                        item.SUBTITLE,
+                        item.PLACE,
+                    ].filter(Boolean).join(' ').toLowerCase();
+                    const addrFields = [
+                        item.ADDR1,
+                        item.ADDR2,
+                        item.GUGUN_NM,
+                    ].filter(Boolean).join(' ').toLowerCase();
+                    return nameFields.includes(term) || addrFields.includes(term);
+                });
+                setFilteredItems(filtered);
+                setVisibleCount(PAGE_SIZE);
+            };
+
+            const visibleItems = filteredItems.slice(0, visibleCount);
+            const canLoadMore = visibleItems.length < filteredItems.length;
+
+            // 인터섹션 옵저버로 무한 스크롤 구현 (더 보기 버튼 제거)
+            useEffect(() => {
+                if (!canLoadMore) return;
+                const sentinel = sentinelRef.current;
+                if (!sentinel) return;
+
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, items.length));
+                            }
+                        });
+                    },
+                    { rootMargin: '200px 0px 200px 0px', threshold: 0.1 }
+                );
+
+                observer.observe(sentinel);
+                return () => observer.disconnect();
+            }, [canLoadMore, filteredItems.length]);
+
+            return (
+                <div className="container">
+                    <div className="header">
+                        <h1>🍜 부산광역시 부산맛집정보</h1>
+                        <p>부산맛집 국문 정보 조회 서비스 (React)</p>
+                    </div>
+                    <div className="content">
+                        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
+                                placeholder="식당명 또는 주소로 검색"
+                                style={{
+                                    flex: '1 1 280px',
+                                    padding: '12px 14px',
+                                    borderRadius: '8px',
+                                    border: '1px solid #ddd',
+                                    fontSize: '1em'
+                                }}
+                            />
+                            <button
+                                onClick={handleSearch}
+                                style={{
+                                    padding: '12px 20px',
+                                    background: '#667eea',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    cursor: 'pointer',
+                                    fontSize: '1em',
+                                    boxShadow: '0 4px 10px rgba(0,0,0,0.12)'
+                                }}
+                            >
+                                검색하기
+                            </button>
+                        </div>
+                        {loading && <div className="loading">데이터를 불러오는 중</div>}
+                        {error && <div className="error">{error}</div>}
+                        {!loading && !error && (
+                            <>
+                        <div className="stats">
+                            <p>
+                                <strong>총 {totalCount}개</strong>
+                                {searchTerm.trim()
+                                    ? <> · 검색결과 <strong>{filteredItems.length}개</strong></>
+                                    : null}
+                                · 화면에 <strong>{visibleItems.length}개</strong> 표시
+                            </p>
+                        </div>
+                                <div className="restaurant-grid" style={{ gridTemplateColumns: 'repeat(3, minmax(250px, 1fr))' }}>
+                                    {visibleItems.map(item => (
+                                        <RestaurantCard key={item.UC_SEQ || item.MAIN_TITLE || item.TITLE} item={item} />
+                                    ))}
+                                </div>
+                                <div ref={sentinelRef} style={{ height: '1px' }} />
+                            </>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
+
