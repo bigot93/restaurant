@@ -187,12 +187,14 @@
 
         // API 문서: 부산맛집정보 서비스 (getFoodKr)
         const API_KEY = '6963e001ce3b550dc369c2add83fa89a03f5c3bd507e66c147494cd3113c3225';
-        const API_URLS = [
-            'http://apis.data.go.kr/6260000/FoodService/getFoodKr',
-            'https://apis.data.go.kr/6260000/FoodService/getFoodKr'
-        ];
-        const USE_CORS_PROXY = false;
-        const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+        const IS_HTTPS = typeof window !== 'undefined' && window.location.protocol === 'https:';
+        // HTTPS 페이지에서는 http 호출이 차단되므로 https 우선
+        const API_URLS = IS_HTTPS
+            ? ['https://apis.data.go.kr/6260000/FoodService/getFoodKr']
+            : ['http://apis.data.go.kr/6260000/FoodService/getFoodKr', 'https://apis.data.go.kr/6260000/FoodService/getFoodKr'];
+        // CORS 프록시 (https 기반)
+        const CORS_PROXY = 'https://corsproxy.io/?';
+        const USE_CORS_PROXY = IS_HTTPS; // 배포(https) 환경에서는 기본적으로 프록시 사용
         const PAGE_SIZE = 12; // 최초 12개, 더 보기 시 12개씩
 
         // XML 응답을 JSON 형태로 변환
@@ -363,31 +365,50 @@
 
                             while (true) {
                                 let url = `${baseUrl}?serviceKey=${encodedKey}&numOfRows=${pageSize}&pageNo=${page}&resultType=json`;
-                                if (USE_CORS_PROXY) url = CORS_PROXY + url;
+                                let lastError = null;
+                                // 두 번 시도: 1) 직접 요청 2) 프록시 요청
+                                for (let attempt = 0; attempt < 2; attempt += 1) {
+                                    let fetchUrl = url;
+                                    if (attempt === 1 || USE_CORS_PROXY) {
+                                        fetchUrl = `${CORS_PROXY}${encodeURIComponent(url)}`;
+                                    }
+                                    try {
+                                        const res = await fetch(fetchUrl, { headers: { Accept: 'application/json' } });
+                                        const text = await res.text();
 
-                                const res = await fetch(url, { headers: { Accept: 'application/json' } });
-                                const text = await res.text();
+                                        let data;
+                                        try {
+                                            data = JSON.parse(text);
+                                        } catch {
+                                            data = parseXmlToData(text);
+                                            if (!data) throw new Error('JSON/XML 파싱 실패');
+                                        }
 
-                                let data;
-                                try {
-                                    data = JSON.parse(text);
-                                } catch {
-                                    data = parseXmlToData(text);
-                                    if (!data) throw new Error('JSON/XML 파싱 실패');
+                                        const header = data.getFoodKr?.header || data.response?.header || data.header;
+                                        if (header && ((header.code && header.code !== '00') || (header.resultCode && header.resultCode !== '00'))) {
+                                            throw new Error(header.message || header.resultMsg || 'API 오류');
+                                        }
+
+                                        const { items, total: t } = parseItems(data);
+                                        total = t || total;
+                                        if (items.length === 0) throw new Error('NODATA');
+
+                                        allItems = allItems.concat(items);
+                                        if (allItems.length >= total) {
+                                            lastError = null;
+                                            break;
+                                        }
+
+                                        lastError = null;
+                                        break; // 성공했으므로 다음 page로 이동
+                                    } catch (err) {
+                                        lastError = err;
+                                        // 다음 루프에서 프록시 시도
+                                    }
                                 }
 
-                                const header = data.getFoodKr?.header || data.response?.header || data.header;
-                                if (header && ((header.code && header.code !== '00') || (header.resultCode && header.resultCode !== '00'))) {
-                                    throw new Error(header.message || header.resultMsg || 'API 오류');
-                                }
-
-                                const { items, total: t } = parseItems(data);
-                                total = t || total;
-                                if (items.length === 0) break;
-
-                                allItems = allItems.concat(items);
+                                if (lastError) throw lastError;
                                 if (allItems.length >= total) break;
-
                                 page += 1;
                             }
 
